@@ -1,0 +1,114 @@
+{
+  "_note": "Every value was checked against the linked official text on verified_on. Add a new year only after checking its sources. The scripts refuse a year that is missing here.",
+  "verified_on": "2026-11-06",
+  "sources": {
+    "gwg": "https://www.gesetze-im-internet.de/estg/__6.html (§ 6 Abs. 2 EStG: 800 EUR net); R 9.12 LStR: https://lsth.bundesfinanzministerium.de/lsth/2025/A-Einkommensteuergesetz/II-Einkommen-2-24b/4-Ueberschuss-d-Einnahmen-ueber-die-Werbungsk-8-9a/Paragraf-9/r-9-12.html (employees deduct the gross price when the net price is within the limit)",
+    "afa": "https://www.gesetze-im-internet.de/estg/__7.html (§ 7 Abs. 1 Satz 4: months before purchase are cut; Abs. 4: 3 / 2 / 2.5 %; Abs. 5a: 5 % declining); R 7.4 Abs. 2 EStR: https://esth.bundesfinanzministerium.de/esth/2024/A-Einkommensteuergesetz/II-Einkommen-2-24b/3-Gewinn-4-7i/Paragraf-7/r-7-4.html",
+    "home_office_day": "https://www.gesetze-im-internet.de/estg/__4.html (§ 4 Abs. 5 Satz 1 Nr. 6c EStG: 6 EUR per day, max 1 260 EUR)",
+    "employee_lump_sum": "https://www.gesetze-im-internet.de/estg/__9a.html (§ 9a Satz 1 Nr. 1a EStG: 1 230 EUR)",
+    "telecom": "https://lsth.bundesfinanzministerium.de/lsth/2025/A-Einkommensteuergesetz/II-Einkommen-2-24b/4-Ueberschuss-d-Einnahmen-ueber-die-Werbungsk-8-9a/Paragraf-9/r-9-1.html (R 9.1 Abs. 5 LStR: without proof 20 % of the bill, max 20 EUR per month)",
+    "household_35a": "https://www.gesetze-im-internet.de/estg/__35a.html (§ 35a Abs. 2: 20 %, max 4 000 EUR; Abs. 3: 20 %, max 1 200 EUR; Abs. 5: labour cost only, invoice plus payment to the provider's account)",
+    "cash_principle": "https://www.gesetze-im-internet.de/estg/__11.html (§ 11 Abs. 2 EStG: costs count in the year they are paid)",
+    "union_dues": "https://www.gesetze-im-internet.de/estg/__9a.html (§ 9a Satz 3 EStG: union dues on top of the lump sum; not in the 2025 text at https://lsth.bundesfinanzministerium.de/lsth/2025/A-Einkommensteuergesetz/II-Einkommen-2-24b/4-Ueberschuss-d-Einnahmen-ueber-die-Werbungsk-8-9a/Paragraf-9a/inhalt.html, so from 2026)",
+    "computer_1_year": "https://www.elster.de/eportal/helpGlobal?themaGlobal=help_est_ufa_10_2024 (computer hardware and software fully deductible in the year of purchase, BMF letter 22.02.2022, BStBl I p. 187)",
+    "hausgeld_reserve": "https://www.bundesfinanzhof.de/de/presse/pressemeldungen/detail/noch-kein-steuerabzug-fuer-hausgeldzahlungen-in-die-erhaltungsruecklage/ (BFH IX R 19/24: reserve payments deductible only when spent)"
+  },
+  "years": {
+    "2023": {
+      "gwg_net": "800",
+      "vat_rate": "0.19",
+      "home_office_day": "6",
+      "home_office_cap": "1260",
+      "employee_lump_sum": "1230",
+      "telecom_share": "0.20",
+      "telecom_month_cap": "20",
+      "household_services_rate": "0.20",
+      "household_services_cap": "4000",
+      "craftsman_rate": "0.20",
+      "craftsman_cap": "1200",
+      "building_linear": {
+        "after_2022": "0.03",
+        "1925_to_2022": "0.02",
+        "before_1925": "0.025"
+      },
+      "building_declining_rate": "0.05",
+      "building_declining_window": [
+        "2023-10-01",
+        "2029-09-30"
+      ],
+      "union_dues_on_top": false
+    },
+    "2024": {
+      "gwg_net": "800",
+      "vat_rate": "0.19",
+      "home_office_day": "6",
+      "home_office_cap": "1260",
+      "employee_lump_sum": "1230",
+      "telecom_share": "0.20",
+      "telecom_month_cap": "20",
+      "household_services_rate": "0.20",
+      "household_services_cap": "4000",
+      "craftsman_rate": "0.20",
+      "craftsman_cap": "1200",
+      "building_linear": {
+        "after_2022": "0.03",
+        "1925_to_2022": "0.02",
+        "before_1925": "0.025"
+      },
+      "building_declining_rate": "0.05",
+      "building_declining_window": [
+        "2023-10-01",
+        "2029-09-30"
+      ],
+      "union_dues_on_top": false
+    },
+    "2025": {
+      "gwg_net": "800",
+      "vat_rate": "0.19",
+      "home_office_day": "6",
+      "home_office_cap": "1260",
+      "employee_lump_sum": "1230",
+      "telecom_share": "0.20",
+      "telecom_month_cap": "20",
+      "household_services_rate": "0.20",
+      "household_services_cap": "4000",
+      "craftsman_rate": "0.20",
+      "craftsman_cap": "1200",
+      "building_linear": {
+        "after_2022": "0.03",
+        "1925_to_2022": "0.02",
+        "before_1925": "0.025"
+      },
+      "building_declining_rate": "0.05",
+      "building_declining_window": [
+        "2023-10-01",
+        "2029-09-30"
+      ],
+      "union_dues_on_top": false
+    },
+    "2026": {
+      "gwg_net": "800",
+      "vat_rate": "0.19",
+      "home_office_day": "6",
+      "home_office_cap": "1260",
+      "employee_lump_sum": "1230",
+      "telecom_share": "0.20",
+      "telecom_month_cap": "20",
+      "household_services_rate": "0.20",
+      "household_services_cap": "4000",
+      "craftsman_rate": "0.20",
+      "craftsman_cap": "1200",
+      "building_linear": {
+        "after_2022": "0.03",
+        "1925_to_2022": "0.02",
+        "before_1925": "0.025"
+      },
+      "building_declining_rate": "0.05",
+      "building_declining_window": [
+        "2023-10-01",
+        "2029-09-30"
+      ],
+      "union_dues_on_top": true
+    }
+  }
+}

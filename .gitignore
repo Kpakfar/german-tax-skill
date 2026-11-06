@@ -1,0 +1,19 @@
+# Never commit tax documents or personal data
+*.pdf
+*.eml
+*.csv
+!skills/german-tax-return/tests/fixtures/*.csv
+ledger-*
+reports/
+mail/
+__pycache__/
+*.pyc
+.DS_Store
+answers*.json
+gather*.md
+*.png
+*.jpg
+*.jpeg
+*.heic
+*.xlsx
+.env

@@ -1,0 +1,4 @@
+{"delimiter": ";", "encoding": "utf-8", "skip_lines": 0,
+ "date_col": "Buchungstag", "date_format": "%d.%m.%Y",
+ "amount_col": "Betrag", "counterparty_col": "Beguenstigter/Zahlungspflichtiger",
+ "purpose_col": "Verwendungszweck"}

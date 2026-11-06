@@ -1,0 +1,10 @@
+[
+  {"match": "telekom|vodafone|o2 |telefonica|1&1|congstar|freenet", "category": "telecom", "note": "phone or internet bill; flat 20 %, max 20 EUR per month"},
+  {"match": "openai|anthropic|github|jetbrains|figma|notion|adobe|canva|zoom|microsoft 365|google workspace", "category": "software", "work_share": "1", "note": "work tool? set work_share to the real work share"},
+  {"match": "udemy|coursera|linkedin learning|volkshochschule|vhs ", "category": "training", "work_share": "1", "note": "training for the current or a future job"},
+  {"match": "wiso|buhl data|taxfix|smartsteuer|steuerberater", "category": "tax_software", "work_share": "0.5", "note": "placeholder share: only the part for work or rental income counts; set your own"},
+  {"match": "hausverwaltung|hausgeld|weg ", "category": "rental_hausgeld", "note": "rental flat: owners' service charge; split out the reserve part as rental_reserve"},
+  {"match": "notar|grundbuch|amtsgericht", "category": "rental_fees", "note": "loan-related fees count at once; purchase-related fees go into the depreciation base"},
+  {"match": "kontoführung|kontofuehrung|account fee", "category": "fees", "work_share": "1", "note": "account fees, if the account is used for salary or rent"},
+  {"match": "netflix|spotify|disney|rewe|edeka|lidl|aldi", "category": "private", "note": "private, never deductible"}
+]

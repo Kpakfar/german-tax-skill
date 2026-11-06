@@ -1,0 +1,102 @@
+{
+  "_note": "Screening interview. 12 questions find the areas of a return. Each yes opens follow-ups, a document list, ledger categories and the usual ELSTER forms. Form names are the common ones; check the selected year in ELSTER.",
+  "questions": [
+    {
+      "id": "status",
+      "ask": "Which tax year is this, and do you file alone or jointly with a spouse or registered partner?",
+      "always": true,
+      "follow_up": ["Married or partnered for the whole year?", "Did you move or change tax class during the year?", "Church member (Kirchensteuer)?"],
+      "gather": ["last year's return and Steuerbescheid (tax assessment)", "Steuer-ID (tax ID) of each person, kept local", "any letters from the Finanzamt (tax office) this year"],
+      "categories": [],
+      "forms": ["Hauptvordruck (main form)"]
+    },
+    {
+      "id": "employment",
+      "ask": "Were you employed, and by how many employers?",
+      "follow_up": ["Start and end dates of each job", "Any severance, or a bonus or share plan that covers more than one year?", "Did the employer reimburse any costs tax-free?"],
+      "gather": ["Lohnsteuerbescheinigung (wage tax certificate) for each job", "contracts or letters for severance or long-term incentive plans"],
+      "categories": [],
+      "forms": ["Anlage N (employment)"]
+    },
+    {
+      "id": "workplace",
+      "ask": "Where did you work: office, home, or both? How far is your commute one way?",
+      "follow_up": ["Office days and home-office days in the year", "Public transport costs, if higher than the distance allowance", "Is there a separate room used only for work?"],
+      "gather": ["a calendar or count of office and home days", "public transport tickets", "floor plan only if a separate work room is claimed"],
+      "categories": ["home_office_days", "travel"],
+      "forms": ["Anlage N (employment)"]
+    },
+    {
+      "id": "work_costs",
+      "ask": "Did you pay for anything for work yourself: equipment, software, courses, books, job applications, work travel, union or professional fees?",
+      "follow_up": ["Purchase date and price of each item", "Work share for mixed use", "Useful life for items above the low-value limit"],
+      "gather": ["every Rechnung (invoice) and receipt", "bank or card statement lines for each", "subscription list from bank, card and app stores"],
+      "categories": ["work_equipment", "software", "training", "travel", "fees", "union_dues", "other_work"],
+      "forms": ["Anlage N (employment)"]
+    },
+    {
+      "id": "telecom",
+      "ask": "Do you have phone or internet contracts in your name that you also use for work?",
+      "follow_up": ["Monthly cost of each", "Credits or welcome bonuses during the year", "A three-month log of work use, if more than the flat 20 % is claimed"],
+      "gather": ["all monthly bills for the year"],
+      "categories": ["telecom"],
+      "forms": ["Anlage N (employment)"]
+    },
+    {
+      "id": "self_employed",
+      "ask": "Did you have any freelance, business or side income, including fees, platform sales or one-off jobs?",
+      "follow_up": ["Total income and costs", "VAT registered or small business (Kleinunternehmer)?", "Was the work started, changed or ended this year?"],
+      "gather": ["invoices you sent", "receipts for business costs", "an EÜR (income-surplus statement) if one exists"],
+      "categories": ["business_expense"],
+      "forms": ["Anlage S or G (self-employed or trade)", "Anlage EÜR"]
+    },
+    {
+      "id": "rental",
+      "ask": "Do you own property that you rent out, or did you buy or sell property this year?",
+      "follow_up": ["Purchase date, price, building year and contract date", "Rent received and when the tenant moved in", "Loan, interest and fees for the mortgage", "Repairs, Hausgeld (owners' service charge) and the part of it paid into the owners' reserve", "Empty months before the first tenant"],
+      "gather": ["purchase contract and notary invoices", "builder's final invoice or completion date", "loan contract and yearly interest statement", "Hausgeldabrechnung (owners' statement)", "rental contract and rent received", "official land value (Bodenrichtwert) for the building share"],
+      "categories": ["rental_hausgeld", "rental_reserve", "rental_interest", "rental_fees", "rental_building"],
+      "forms": ["Anlage V (rental)"]
+    },
+    {
+      "id": "capital",
+      "ask": "Did you have bank interest, dividends, funds, crypto, or a broker account, in Germany or abroad?",
+      "follow_up": ["Was the saver's allowance used in full by exemption orders?", "Any foreign broker that did not withhold German tax?", "Crypto sold within a year of buying?"],
+      "gather": ["Jahressteuerbescheinigung (yearly tax certificate) from each bank and broker", "foreign broker statements", "crypto trade history"],
+      "categories": [],
+      "forms": ["Anlage KAP", "Anlage SO (other income) for crypto"]
+    },
+    {
+      "id": "benefits_foreign",
+      "ask": "Did you receive benefits (parental, unemployment, sick or short-time pay) or any income from abroad?",
+      "follow_up": ["Type, period and amount of each benefit", "Country and type of foreign income", "Was foreign income taxed there?"],
+      "gather": ["benefit certificates", "foreign salary or tax documents"],
+      "categories": [],
+      "forms": ["Anlage N (employment)", "Anlage AUS or N-AUS (foreign income)"]
+    },
+    {
+      "id": "children",
+      "ask": "Do you have children, and did you pay for childcare or school?",
+      "follow_up": ["Birth dates and who received child benefit", "Childcare invoices, paid by bank transfer", "School fees for a private school"],
+      "gather": ["childcare invoices and bank proof", "school fee statements"],
+      "categories": [],
+      "forms": ["Anlage Kind (child)"]
+    },
+    {
+      "id": "insurance_pension",
+      "ask": "Did you pay for insurance or pension yourself: private health, pension plans (Riester, Rürup), liability, disability or life insurance?",
+      "follow_up": ["Contributions paid this year", "Were they already reported by the insurer?"],
+      "gather": ["yearly contribution statements from each insurer"],
+      "categories": [],
+      "forms": ["Anlage Vorsorgeaufwand (insurance)", "Anlage AV (Riester)"]
+    },
+    {
+      "id": "home_other",
+      "ask": "At home: did you pay a cleaner, gardener, craftsmen, or a service-charge bill? And did you have donations, high medical costs, or a move for work?",
+      "follow_up": ["Labour cost on each invoice, paid by bank transfer", "The § 35a lines in the Nebenkostenabrechnung (service-charge statement)", "Donation receipts", "Medical costs not covered by insurance"],
+      "gather": ["service-charge statement from the landlord or owners' association", "craftsman and cleaner invoices with bank proof", "donation receipts", "medical invoices", "moving invoices if the move was for work"],
+      "categories": ["household_services", "craftsman"],
+      "forms": ["Haushaltsnahe Aufwendungen (household costs)", "Sonderausgaben (special expenses)", "Außergewöhnliche Belastungen (extraordinary costs)"]
+    }
+  ]
+}
