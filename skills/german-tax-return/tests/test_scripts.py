@@ -297,5 +297,63 @@ class Monthly(unittest.TestCase):
             self.assertEqual(rows[0]["currency"], "EUR")
 
 
+class ReviewRound3(unittest.TestCase):
+    """Findings of the third review: bad input must be flagged, never counted."""
+
+    def run_rows(self, rows, year=2025):
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Path(tmp) / "l.csv"
+            write_ledger(p, rows)
+            from taxlib import read_ledger
+            return limits.apply(read_ledger(p), year, require_approved=False)
+
+    def test_work_share_above_one_is_flagged_not_multiplied(self):
+        out, _ = self.run_rows([{"date": "2025-02-01", "category": "software", "description": "s", "amount": "100", "work_share": "5"}])
+        self.assertEqual(out[0]["counted"], D("0"))
+        self.assertIn("work_share", out[0]["flags"])
+
+    def test_negative_home_office_days_flagged(self):
+        out, s = self.run_rows([{"date": "2025-02-01", "category": "home_office_days", "description": "d", "amount": "-30", "person": "a"}])
+        self.assertIn("whole number of days", out[0]["flags"])
+        self.assertNotIn("home office a", s)
+
+    def test_credit_only_month_is_flagged(self):
+        out, _ = self.run_rows([
+            {"date": "2025-01-10", "category": "telecom", "description": "bill", "amount": "50"},
+            {"date": "2025-02-10", "category": "telecom", "description": "refund", "amount": "-50"},
+        ])
+        self.assertEqual(out[0]["counted"], D("10.00"))
+        self.assertIn("credits exceed bills", out[1]["flags"])
+
+    def test_whole_euro_amounts_are_found(self):
+        self.assertIn(D("100.00"), amounts_in("Invoice total: 100 EUR"))
+        self.assertIn(D("100.00"), amounts_in("EUR 100"))
+        self.assertIn(D("250.00"), amounts_in("€ 250"))
+        self.assertNotIn(D("2025.00"), amounts_in("Rechnung 2025-1001 vom 12.03.2025"))
+
+    def test_foreign_currency_document_is_flagged(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            t = Path(tmp)
+            (t / "usd.txt").write_text("Invoice total: 100.00 USD", encoding="utf-8")
+            (t / "eur.txt").write_text("Rechnungsbetrag 100,00 EUR", encoding="utf-8")
+            write_ledger(t / "l.csv", [
+                {"date": "2025-01-01", "category": "software", "description": "a", "amount": "100", "source": "usd.txt"},
+                {"date": "2025-01-01", "category": "software", "description": "b", "amount": "100", "source": "eur.txt"},
+            ])
+            res = check_receipts.check(t / "l.csv", t, D("0"))
+            self.assertEqual([r["status_check"] for r in res], ["CHECK CURRENCY", "OK"])
+
+    def test_example_folder_runs_as_documented(self):
+        ex = SCRIPTS.parent / "examples"
+        r = subprocess.run([sys.executable, str(SCRIPTS / "check_receipts.py"), "ledger-example.csv"],
+                           cwd=ex, capture_output=True, text=True)
+        self.assertEqual(r.returncode, 1)
+        self.assertIn("3 of 4 amounts found", r.stdout)
+        r = subprocess.run([sys.executable, str(SCRIPTS / "limits.py"), "ledger-example.csv", "--year", "2025"],
+                           cwd=ex, capture_output=True, text=True)
+        self.assertIn("| 8,99 |", r.stdout)
+        self.assertIn("tax cut 60,00", r.stdout)
+
+
 if __name__ == "__main__":
     unittest.main()

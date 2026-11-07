@@ -26,7 +26,18 @@ _AMOUNT = re.compile(
     r"|(?<![\d.,])[-+]?\d+\.\d{2}(?![\d])(?!\.\d)"  # plain dot decimals, not dates
     r"|(?<![\d.,])[-+]?\d+(?:,\d{1,2})(?![\d])(?!\.\d)"  # bare comma decimal
     r"|(?<![\d.,])[-+]?\d{1,3}(?:\.\d{3})+(?=\s?(?:€|EUR|Euro))"  # 1.234 EUR
+    r"|(?<![\d.,])[-+]?\d{1,6}(?=\s?(?:€|EUR|Euro)\b)"  # 100 EUR (whole euros)
+    r"|(?:(?<=EUR\s)|(?<=EUR)|(?<=€\s)|(?<=€))\d{1,6}(?![\d.,])"  # EUR 100, € 250
 )
+
+# A document in another currency can still contain the same digits.
+_FOREIGN = re.compile(r"\b(?:USD|GBP|CHF|US\$|£)\b|\$|£")
+_EURO = re.compile(r"€|\bEUR\b|\bEuro\b", re.IGNORECASE)
+
+
+def foreign_currency_only(text: str) -> bool:
+    """True when the text names a foreign currency and never the euro."""
+    return bool(_FOREIGN.search(text)) and not _EURO.search(text)
 
 
 def parse_amount(raw: str) -> Decimal:

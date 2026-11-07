@@ -17,3 +17,4 @@ gather*.md
 *.heic
 *.xlsx
 .env
+!skills/german-tax-return/examples/*.csv

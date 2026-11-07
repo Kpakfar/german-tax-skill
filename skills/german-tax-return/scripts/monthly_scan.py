@@ -170,14 +170,18 @@ def main() -> int:
     existing = read_ledger(a.ledger) if a.ledger.exists() else []
     from collections import Counter
     have = Counter((r["date"], r["amount"].quantize(Decimal("0.01")), r["description"]) for r in existing)
+    unsourced = {k for k, c in Counter((r["date"], r["amount"].quantize(Decimal("0.01")), r["description"])
+                                        for r in existing if not (r.get("source") or "").strip()).items() if c}
     run = Counter()
-    new_rows = []
+    new_rows, late_receipts = [], []
     for t, rule, receipt, _ in candidates:
         desc = f"{t['counterparty']} {t['purpose']}".strip()[:80]
         cost = (-t["amount"]).quantize(Decimal("0.01"))   # payment > 0, refund < 0
         key = (t["date"].isoformat(), cost, desc)
         run[key] += 1
         if run[key] <= have[key]:   # already in the ledger (re-run), keep identical real payments
+            if receipt and key in unsourced:   # the receipt arrived after the row was proposed
+                late_receipts.append((t, receipt))
             continue
         src = ""
         if receipt:
@@ -221,6 +225,8 @@ def main() -> int:
     for t, rule, receipt, note in candidates:
         L.append(f"| {t['date']} | {rule['category']} | {eur(-t['amount'])} | {t['counterparty']} | "
                  f"{receipt['path'].name if receipt else '**MISSING**'} | {note} |")
+    L += ["", "## Ledger rows still without a source, receipt found now (fill the source column)", ""]
+    L += [f"- {t['date']} {t['counterparty']} {eur(-t['amount'])}: {r['path'].name}" for t, r in late_receipts] or ["- none"]
     L += ["", "## Recurring payments without a rule: work or private?", ""]
     L += [f"- {t['date']} {t['counterparty']} {eur(abs(t['amount']))}: add a rule to rules.json" for t in unruled] or ["- none"]
     L += ["", "## Invoices this month with no bank payment (card, PayPal, cash?)", ""]

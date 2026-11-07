@@ -24,7 +24,8 @@ Categories:
                        hardware/software, else depreciation with months cut in year 1
   software, training, travel, fees, tax_software, other_work
                        amount x work_share
-  union_dues           counted on top of the employee lump sum
+  union_dues           from 2026 counted on top of the employee lump sum (§ 9a
+                       Satz 3 EStG); in earlier years an ordinary work cost
   business_expense     self-employed costs (EÜR), kept apart from employee costs
   household_services   § 35a (2): 20 % of labour cost, max 4 000 EUR, paid by bank
   craftsman            § 35a (3): 20 % of labour cost, max 1 200 EUR, paid by bank
@@ -104,6 +105,25 @@ def year_edge_flag(paid: date, year: int) -> str:
     return msg
 
 
+def input_errors(row: dict, cat: str) -> list[str]:
+    """Values the law cannot work with. A bad row is flagged and never counted."""
+    errs = []
+    if not (D(0) <= row["work_share"] <= D(1)):
+        errs.append(f"work_share {row['work_share']} must be between 0 and 1")
+    if cat != "telecom" and row["amount"] < 0:
+        errs.append("negative amount: only telecom credits may be negative")
+    if cat == "home_office_days" and (row["amount"] < 0 or row["amount"] != row["amount"].to_integral_value()):
+        errs.append("home_office_days: amount must be a whole number of days")
+    life = (row.get("useful_life_years") or "").strip()
+    if life:
+        try:
+            if D(life) <= 0:
+                errs.append("useful_life_years must be positive")
+        except Exception:
+            errs.append(f"useful_life_years {life!r} is not a number")
+    return errs
+
+
 def apply(rows: list[dict], year: int, require_approved: bool = True) -> tuple[list[dict], dict]:
     """Apply the year's limits. Rows with status 'rejected' never count. With
     require_approved, every row that is not 'approved' is flagged."""
@@ -126,7 +146,10 @@ def apply(rows: list[dict], year: int, require_approved: bool = True) -> tuple[l
         if require_approved and status != "approved":
             flags.append("not approved yet: set status=approved after review")
         cur = (row.get("currency") or "EUR").strip().upper()
-        if cur != "EUR":
+        bad_input = input_errors(row, cat)
+        if bad_input:
+            flags.extend(bad_input)
+        elif cur != "EUR":
             flags.append(f"amount in {cur}: convert to EUR at the payment date, then re-run")
         elif cat == "rental_building":
             note = "purchase price: not a yearly cost, use afa.py for depreciation"
@@ -196,6 +219,9 @@ def apply(rows: list[dict], year: int, require_approved: bool = True) -> tuple[l
         for r in flat:
             r["counted"] = r2(flat_total * r["amount"] / gross) if gross > 0 else D(0)
             r["note"] = f"{share * 100:.0f} % of the month's bills, max {cap} EUR per month"
+        if flat and gross < 0:
+            for r in flat:
+                r["flags"] = "; ".join(x for x in (r["flags"], f"{month}: credits exceed bills; move the credit to the month of the bill it refunds") if x)
         if proven and flat:
             for r in group:
                 r["flags"] = "; ".join(x for x in (r["flags"], f"{month}: flat rule and proven share mixed; use one method per month") if x)

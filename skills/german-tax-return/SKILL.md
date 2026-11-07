@@ -110,4 +110,5 @@ Each step has a gate. Do not pass a gate on the model's judgment alone.
 - `references/monthly.md`: the monthly routine and how to schedule it
 - `references/intake-checklist.md`, `references/output-template.md`
 - `references/official-sources.md`
+- `examples/`: invented ledger and receipts to try both checks in a minute
 - `tests/`: `python3 -m unittest discover -s tests`

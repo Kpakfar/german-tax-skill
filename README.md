@@ -5,14 +5,10 @@ a German personal income tax return (Einkommensteuererklärung) for tax years
 2024 onward, and to scan each month's payments, invoices and emails for
 deductible costs.
 
-> **This is a template, not tax advice.** It gives you a structure, a
-> 12-question interview and checking scripts for your own return. It is built
-> from one household's return and checked against official law texts on the
-> date in `thresholds.json`, but law changes yearly and your case may differ.
-> You are responsible for what you file. Check every figure, and see a
-> Steuerberater (tax advisor) or a Lohnsteuerhilfeverein (wage-tax help
-> association) for complex cases. No warranty (MIT license). Fork it and adapt
-> the questions, rules and limits to your situation.
+> **A template for your own return, built from one household's experience.
+> Not tax advice.** Check every figure before you file; the law changes every
+> year and your case may differ. Supported years: 2023 to 2026, see
+> [Limits](#limits-honestly-read-with-the-disclaimer-above).
 
 **The model proposes. Scripts check. You sign.**
 
@@ -46,18 +42,19 @@ agent never submits anything.
 | `scripts/monthly_scan.py` | monthly: bank CSV + invoices + `.eml` -> candidates, missing receipts, unknown subscriptions, year-to-date totals |
 | `references/thresholds.json` | every number with its official source and check date |
 | `references/*.md` | intake checklist, decision guide, workflow, monthly routine |
-| `tests/` | 32 tests on invented data |
+| `examples/` | a four-row ledger and receipts, invented, with one planted mismatch |
+| `tests/` | 38 tests on invented data |
 
 Python 3.10+, standard library only. Optional: `pdftotext` (poppler) for PDFs,
 `tesseract` with `deu` for scans.
 
 ## Install
 
-Clone or download this repository, then:
+Clone or download this repository, then from its root folder:
 
 ```bash
 mkdir -p ~/.claude/skills
-cp -r german-tax-skill/skills/german-tax-return ~/.claude/skills/
+cp -r skills/german-tax-return ~/.claude/skills/
 python3 ~/.claude/skills/german-tax-return/tests/test_scripts.py
 ```
 
@@ -65,6 +62,38 @@ The skill folder carries its own copy of the LICENSE.
 
 Then ask your agent: "Help me prepare my 2025 German tax return" or
 "Run the monthly tax scan for October".
+
+## Try it in one minute (invented data)
+
+`skills/german-tax-return/examples/` holds a four-row ledger and four
+invented receipts. One amount is wrong on purpose.
+
+```bash
+cd ~/.claude/skills/german-tax-return/examples
+python3 ../scripts/check_receipts.py ledger-example.csv
+```
+
+```
+| status | date | category | amount | description | source |
+|---|---|---|---:|---|---|
+| OK | 2025-03-14 | work_equipment | 329,00 | Monitor 27" | docs/2025-03-14_monitor.txt |
+| OK | 2025-05-02 | telecom | 44,95 | Mobile May | docs/2025-05-02_mobile.txt |
+| NOT FOUND | 2025-06-20 | software | 89,00 | Editor licence | docs/2025-06-20_editor.txt |
+| OK | 2025-09-30 | household_services | 380,00 | Window cleaning | docs/2025-09-30_cleaning.txt |
+
+3 of 4 amounts found in their source document.
+```
+
+The editor invoice says 98,00, the ledger says 89,00: a typo the model would
+have waved through. Fix the row, then apply the year's limits:
+
+```bash
+python3 ../scripts/limits.py ledger-example.csv --year 2025
+```
+
+The telecom row shrinks to 8,99 (20 % flat rule), the monitor counts in full
+(net price under the 800 EUR limit), the cleaning bill counts only its labour
+share. Every row is flagged "not approved yet": the decision stays yours.
 
 ## Quick look
 
@@ -87,7 +116,10 @@ Monthly scan and scheduling: `skills/german-tax-return/references/monthly.md`.
 - Not tax advice, and no substitute for a Steuerberater (tax advisor) in
   complex cases: a business, foreign income, inheritance, a dispute.
 - Thresholds are checked for 2023 to 2026. Add a year only from official
-  sources; the scripts refuse a year that is missing.
+  sources; the scripts refuse a year that is missing. The next tax year
+  needs a fresh check of every value in `thresholds.json`.
+- `check_receipts.py` checks that the digits are on the document. Whether it
+  is the right document, and whether the cost counts, stays your call.
 - An accepted assessment means the tax office agreed, not that nothing was
   missed.
 

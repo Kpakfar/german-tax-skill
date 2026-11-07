@@ -116,8 +116,9 @@ def main() -> int:
     elif a.cmd == "eligible":
         ok, why = eligible(date.fromisoformat(a.start) if a.start else None,
                            date.fromisoformat(a.contract) if a.contract else None, a.year)
-        print(("ELIGIBLE: " if ok else "NOT ELIGIBLE: ") + why)
-        print("Also confirm: residential use, EU/EEA, bought by the end of the year of completion.")
+        print(("DATE WINDOW OK: " if ok else "NOT ELIGIBLE: ") + why)
+        if ok:
+            print("Not checked here, confirm yourself: residential use, EU/EEA, bought by the end of the year of completion.")
         return 0 if ok else 1
     else:
         start = date.fromisoformat(a.start + "-01")

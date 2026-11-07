@@ -11,9 +11,11 @@
 
 ## 2. Secure
 
-- Data stays local. The user logs in to ELSTER or the tax software; the agent
-  never sees a password.
-- If the model provider can train on chats, the user turns that off first.
+- Files and the checking scripts stay on the user's machine. What the agent
+  sends to its model provider depends on the agent and its settings, so the
+  user checks them first (for example, turns off training on chats).
+- The user logs in to ELSTER or the tax software; the agent never sees a
+  password.
 - No tax ID, IBAN or full name in files that sync or get published.
 
 ## 3. Test task

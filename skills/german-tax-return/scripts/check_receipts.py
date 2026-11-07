@@ -3,7 +3,10 @@
 
 The model may suggest a number. This script decides whether the document
 backs it. A row passes only when the exact amount (to the cent) is found in
-the text of the file named in the `source` column.
+the text of the file named in the `source` column. It is a presence check:
+the digits must be on the document. Whether the document is the right one,
+and whether the cost is deductible, stays a human question. A document that
+names only a foreign currency is flagged CHECK CURRENCY.
 
 Usage:
   check_receipts.py LEDGER.csv [--root DIR] [--tolerance 0.00]
@@ -23,7 +26,7 @@ from decimal import Decimal
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from taxlib import amounts_in, doc_text, eur, read_ledger  # noqa: E402
+from taxlib import amounts_in, doc_text, eur, foreign_currency_only, read_ledger  # noqa: E402
 
 
 def check(ledger: Path, root: Path, tolerance: Decimal) -> list[dict]:
@@ -51,6 +54,9 @@ def check(ledger: Path, root: Path, tolerance: Decimal) -> list[dict]:
                     labor = row.get("labor_cost")
                     if labor is not None and not any(abs(a - abs(labor).quantize(Decimal("0.01"))) <= tolerance for a in found):
                         status, where = "LABOUR NOT FOUND", s
+                        continue
+                    if (row.get("currency") or "EUR").strip().upper() == "EUR" and foreign_currency_only(text):
+                        status, where = "CHECK CURRENCY", s
                         continue
                     status, where = "OK", s
                     break

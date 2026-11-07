@@ -1,0 +1,5 @@
+date,category,description,amount,source,person,work_share,labor_cost,paid_by,useful_life_years,vat_rate,currency,status
+2025-03-14,work_equipment,"Monitor 27""",329.00,docs/2025-03-14_monitor.txt,,1,,card,,,EUR,proposed
+2025-05-02,telecom,Mobile May,44.95,docs/2025-05-02_mobile.txt,,1,,bank,,,EUR,proposed
+2025-06-20,software,Editor licence,89.00,docs/2025-06-20_editor.txt,,1,,card,,,EUR,proposed
+2025-09-30,household_services,Window cleaning,380.00,docs/2025-09-30_cleaning.txt,,1,300.00,bank,,,EUR,proposed
